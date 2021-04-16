@@ -1,0 +1,19 @@
+GOOGLE: 
+
+
+
+Chris Donahue
+
+Adam Roberts
+
+
+
+lien convolutions :
+
+http://datahacker.rs/005-pytorch-convolutional-neural-network-on-mnist-in-pytorch/
+
+https://nextjournal.com/gkoehler/pytorch-mnist
+
+https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
+
+https://www.kaggle.com/sdelecourt/cnn-with-pytorch-for-mnist
