@@ -102,14 +102,10 @@ class DistillationTrainer:
 
     def train_model(self, num_epochs, device):
 
-
         for epoch in range(num_epochs):
-
-
             train_dico= self.do_epoch(device, train=True)
             print(
                 f'TRAIN: Epoch[{epoch + 1}/{num_epochs}], Loss_Classif:{train_dico["loss_classif"]:.4f}, Loss_Logits:{train_dico["loss_logits"]:.4f},  Accuracy:{train_dico["accuracy"]:.4f}')
-
 
             test_dico = self.do_epoch(device, train=False)
             print(f'TRAIN: Epoch[{epoch + 1}/{num_epochs}], Loss_Classif:{test_dico["loss_classif"]:.4f}, Loss_Logits:{test_dico["loss_logits"]:.4f}, Accuracy:{test_dico["accuracy"]:.4f}')

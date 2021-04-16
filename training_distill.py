@@ -20,6 +20,7 @@ class DistillationTrainer:
                  trainloader,
                  testloader,
                  lr,
+                 use_feature_loss=True
                  ):
         # models
         # dataset ou dataloader ?
@@ -32,6 +33,7 @@ class DistillationTrainer:
         self.testloader = testloader
         self.optimizer = optim.Adam(self.student_model.parameters(), lr=lr)
         self.writer = SummaryWriter(log_dir=directory)
+        self.use_feature_loss=use_feature_loss
 
     def do_epoch(self, device, train=True):
         dico = dict(total_loss=0.0,
@@ -59,7 +61,7 @@ class DistillationTrainer:
 
                 loss_classif = self.classif_loss(logits_student, labels)
                 loss_logits = self.logit_distillation_loss(logits_teacher, logits_student)
-                loss_features = self.feature_distillation_loss(fA, fB, f2, f4)
+                loss_features = float(self.use_feature_loss) * self.feature_distillation_loss(fA, fB, f2, f4)
 
                 total_loss=loss_classif+loss_logits+loss_features
 
