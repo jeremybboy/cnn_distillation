@@ -39,7 +39,7 @@ num_params = sum(p.numel() for p in teacher.parameters() if p.requires_grad)
 print('Number of parameters of the teacher: %d' % num_params)
 
 #Create TeacherTrainer
-teacher_dir = "results/teacher51"
+teacher_dir = "results/teacher50"
 os.makedirs(teacher_dir, exist_ok=True)
 teacher_trainer = ClassifTrainer(teacher_dir, teacher, trainLoader, testloader, lr=0.0001)
 print("TRAINER IS READY")
@@ -55,43 +55,43 @@ torch.save(teacher.state_dict(), './trained/teacher2/TrainedTeacher.pt')
 print("trained teacher saved")
 
 
-# # ####################### II. TRAIN SMALL MODEL #######################
-# #
-# # #Create Student model
-# small = StudentNet()
-# small.to(device)
-# print("MODEL IS READY")
+# ####################### II. TRAIN SMALL MODEL #######################
 #
-# num_params_student = sum(p.numel() for p in small.parameters() if p.requires_grad)
-# print('Number of parameters of the student: %d' % num_params_student)
+# #Create Student model
+small = StudentNet()
+small.to(device)
+print("MODEL IS READY")
+
+num_params_student = sum(p.numel() for p in small.parameters() if p.requires_grad)
+print('Number of parameters of the student: %d' % num_params_student)
+
+#Create StudentTrainer
+student_dir="./results/student50"
+os.makedirs(student_dir, exist_ok=True)
+small_trainer = ClassifTrainer(student_dir, small, trainLoader, testloader, lr=0.0001)
+print("TRAINER IS READY")
 #
-# #Create StudentTrainer
-# student_dir="./results/student50"
-# os.makedirs(student_dir, exist_ok=True)
-# small_trainer = ClassifTrainer(student_dir, small, trainLoader, testloader, lr=0.0001)
-# print("TRAINER IS READY")
-# #
-# #train student
-# print("TRAINING MDEL")
-# small_trainer.train_model(1, device)
+#train student
+print("TRAINING MDEL")
+small_trainer.train_model(80, device)
 
 teacher=NeuralNet()
 teacher.to(device)
 teacher.load_state_dict(torch.load('./trained/teacher2/TrainedTeacher.pt', map_location="cuda:0"))
 
 
+
+#Create Distill model
+distill = StudentNet()
+distill.to(device)
+print("MODEL Distill IS READY")
 #
-# #Create Distill model
-# distill = StudentNet()
-# distill.to(device)
-# print("MODEL Distill IS READY")
-# #
-# #Create DistillTrainer
-# distill_dir="./results/distill49temp1"
-# os.makedirs(distill_dir, exist_ok=True)
-# distill_trainer = DistillationTrainer(distill_dir, distill, teacher, trainLoader, testloader, lr=0.001)
-# print("TRAINER IS READY")
-#
-# #train student
-# print("TRAINING distilled MODEL")
-# distill_trainer.train_model(2, device)
+#Create DistillTrainer
+distill_dir="./results/distill50"
+os.makedirs(distill_dir, exist_ok=True)
+distill_trainer = DistillationTrainer(distill_dir, distill, teacher, trainLoader, testloader, lr=0.0001)
+print("TRAINER IS READY")
+
+#train student
+print("TRAINING distilled MODEL")
+distill_trainer.train_model(80, device)
